@@ -3,30 +3,59 @@ package de.it_economics.eclipse.plugin.timer.parts;
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 import javax.inject.Named;
+
 import org.eclipse.e4.core.di.annotations.Optional;
 import org.eclipse.e4.ui.di.Focus;
 import org.eclipse.e4.ui.services.IServiceConstants;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.custom.StackLayout;
+import org.eclipse.swt.layout.RowLayout;
+import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
+import org.eclipse.swt.widgets.Text;
+
+import de.it_economics.eclipse.plugin.timer.utils.RepeatableTask;
+import de.it_economics.eclipse.plugin.timer.utils.RepeatedUiExecution;
 
 public class TimerView {
 	private Label myLabelInView;
-
+	private Label text;
+	
 	@PostConstruct
 	public void createPartControl(Composite parent) {
-		System.out.println("Enter in SampleE4View postConstruct");
-
-		myLabelInView = new Label(parent, SWT.BORDER);
-		myLabelInView.setText("This is a sample E4 view");
-
+		RowLayout rowLayout = new RowLayout();
+		rowLayout.center = true;
+		rowLayout.type = SWT.HORIZONTAL;
+		parent.setLayout(rowLayout);
+		text = new Label(parent, SWT.FLAT);
+		text.setText("Here could be the Timer.");
+		Button button = new Button(parent, SWT.PUSH);
+		button.setText("start");
+		updateTest();
+	}
+	
+	private void updateTest() {
+		text.setText("" + 0);
+		RepeatableTask task = new RepeatableTask() {
+			@Override
+			public void run() {
+				int current = Integer.valueOf(text.getText());
+				current += 1;
+				text.setText("" + current);
+				System.out.println("Text should now be " + current);
+			}
+		};
+		RepeatedUiExecution executer = new RepeatedUiExecution(1000);
+		executer.setTask(task);
+		executer.go();
 	}
 
 	@Focus
 	public void setFocus() {
-		myLabelInView.setFocus();
+		text.setFocus();
 
 	}
 
