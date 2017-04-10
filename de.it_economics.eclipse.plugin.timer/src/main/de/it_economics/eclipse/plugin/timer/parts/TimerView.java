@@ -10,6 +10,7 @@ import javax.inject.Named;
 import org.eclipse.e4.core.di.annotations.Optional;
 import org.eclipse.e4.ui.di.Focus;
 import org.eclipse.e4.ui.services.IServiceConstants;
+import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.swt.SWT;
@@ -20,6 +21,7 @@ import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.RowLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 
@@ -46,7 +48,13 @@ public class TimerView {
 		controlInput(new Composite(parent, SWT.FLAT));
 		getDurationProvider = timeInput(new Composite(parent, SWT.FLAT));
 		timer = new Timer(getDurationProvider, clockLine);
-		
+		timer.setFinalAction(new RepeatableTask() {
+			
+			@Override
+			public void run() {
+				showTimeIsUpWindow();
+			}
+		});
 		// updateTest();
 	}
 	
@@ -141,5 +149,11 @@ public class TimerView {
 	public void setFocus() {
 		clockLine.setFocus();
 
+	}
+	private void showTimeIsUpWindow() {
+		Display display = Display.getDefault();
+		display.asyncExec(() -> {
+			MessageDialog.open(MessageDialog.INFORMATION, display.getActiveShell(), "Time is up", "Time is over", SWT.NONE);
+		});
 	}
 }
