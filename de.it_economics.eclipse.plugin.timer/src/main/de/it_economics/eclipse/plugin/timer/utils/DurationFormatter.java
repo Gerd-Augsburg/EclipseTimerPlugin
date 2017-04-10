@@ -5,7 +5,7 @@ public class DurationFormatter {
 	public DurationFormatter(Duration duration) {
 		this.duration = duration;
 	}
-	String getClocklike() {
+	public String getClocklike() {
 		int[] parts = duration.getOrderedTimeHMSMs();
 		return String.format("%1$02d:%2$02d:%3$02d.%4$03d",
 				parts[0],

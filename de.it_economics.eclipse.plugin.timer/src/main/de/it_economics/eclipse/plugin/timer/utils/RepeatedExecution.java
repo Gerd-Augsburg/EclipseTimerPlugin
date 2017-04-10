@@ -4,11 +4,11 @@ import java.util.Timer;
 import java.util.TimerTask;
 import org.eclipse.swt.widgets.Display;
 
-public class RepeatedUiExecution {
+public class RepeatedExecution {
 	private Timer timer;
 	private long interval;
 	private RepeatableTask task;
-	public RepeatedUiExecution(long interval_ms) {
+	public RepeatedExecution(long interval_ms) {
 		if (interval_ms <= 0) {
 			throw new IllegalArgumentException("frequency_ms must be greater than 0");
 		}
@@ -25,12 +25,7 @@ public class RepeatedUiExecution {
 		this.task = task;
 	}
 	public void go() {
-		timer.scheduleAtFixedRate(new TimerTask() {
-			@Override
-			public void run() {
-				Display.getDefault().asyncExec(task);
-			}
-		}, 0, interval);
+		timer.scheduleAtFixedRate(task, 0, interval);
 	}
 	
 	public boolean cancelRepetition() {
