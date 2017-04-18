@@ -53,4 +53,9 @@ public class Duration implements MsDuration {
 		int[] hms = {(int)getHours(), (int)(getMinutes() % 60), (int)(getSeconds() % 60), (int)(getMilliseconds() % 1000)};
 		return hms;
 	}
+	public Duration clone() {
+		Duration clonedDuration = new Duration();
+		clonedDuration.msduration = this.msduration;
+		return clonedDuration;
+	}
 }

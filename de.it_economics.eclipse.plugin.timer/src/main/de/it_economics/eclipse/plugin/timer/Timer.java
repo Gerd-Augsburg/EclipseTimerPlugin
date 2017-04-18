@@ -1,60 +1,90 @@
 package de.it_economics.eclipse.plugin.timer;
 
-import java.util.Optional;
-import java.util.function.Supplier;
+import java.util.TimerTask;
 
-import org.eclipse.swt.widgets.Display;
-import org.eclipse.swt.widgets.Label;
+import javax.annotation.PostConstruct;
+import javax.inject.Inject;
+import javax.inject.Singleton;
+
+import org.eclipse.e4.core.di.annotations.Creatable;
+import org.eclipse.e4.core.di.annotations.Optional;
+import org.eclipse.e4.core.services.events.IEventBroker;
+import org.eclipse.e4.ui.di.UIEventTopic;
 
 import de.it_economics.eclipse.plugin.timer.utils.Duration;
-import de.it_economics.eclipse.plugin.timer.utils.DurationFormatter;
-import de.it_economics.eclipse.plugin.timer.utils.RepeatableTask;
-import de.it_economics.eclipse.plugin.timer.utils.RepeatedExecution;
+import de.it_economics.eclipse.plugin.timer.utils.NotifcationObject;
 
+@Creatable
+@Singleton
 public class Timer {
-	private Supplier<Duration> duration;
-	private Optional<RepeatableTask> finalAction = Optional.empty();
-	private Label outputField;
-	private Optional<RepeatedExecution> executorOption = Optional.empty();
-	public Timer(Supplier<Duration> durationGetter, Label outputField) {
-		duration = durationGetter;
-		this.outputField = outputField;	
-	}
-	public void setFinalAction(RepeatableTask task) {
-		finalAction = Optional.ofNullable(task);
-	}
-	public void start() {
-		RepeatedExecution executor = executorOption.orElse(new RepeatedExecution(1000));
-		executorOption = Optional.of(executor);
-		Duration timerDuration;
-		try {
-			timerDuration = duration.get();
-		} catch (NumberFormatException e) {
-			System.out.println("Bad Number format");
-			return;
-		}
-		DurationFormatter formatter = new DurationFormatter(timerDuration);
-		System.out.println("Provided Time is " + formatter.getClocklike());
-		executor.setTask(new RepeatableTask() {
-			
+	private final static String BASE = "de/it_economics/eclipse/plugin/timer/";
+	public final static String EVENT_DURATION_UPDATE = BASE + "durationUpdate";
+	public final static String EVENT_TIME_IS_OVER = BASE + "timeIsOver";
+	public final static String EVENT_START_TIMER = BASE + "startTimer";
+	public final static String EVENT_CANCEL_TIMER = BASE + "cancelTimer";
+	public final static String EVENT_DURATION_SET = BASE + "durationSet";
+	public final static String EVENT_REGISTER_DURATION_PROVIDER = BASE + "registerDurationProvider";
+
+	@Inject
+	private IEventBroker eventBroker;
+	private Duration durationLeft;
+	private Duration lastRun;
+
+	private final static long INTERLVALL = 1000;
+	private boolean isTimerRunning = false;
+	private java.util.Timer timer = new java.util.Timer(true);
+	private TimerTask lastTask = createTask();
+
+	private TimerTask createTask() {
+		return new TimerTask() {
 			@Override
 			public void run() {
-				if (timerDuration.isRealPositiv()) {
-					timerDuration.addSeconds(-1);
-				} else {
-					this.cancel();
-					finalAction.ifPresent(RepeatableTask::run);
+				durationLeft.addMilliseconds(-(INTERLVALL));
+				eventBroker.post(EVENT_DURATION_UPDATE, durationLeft.clone());
+				if (!durationLeft.isRealPositiv()) {
+					eventBroker.send(EVENT_TIME_IS_OVER, NotifcationObject.get());
 				}
-				updateUi(formatter.getClocklike());
-			}
-		});
-		executor.go();
+			};
+		};
 	}
-	public void clear() {
-		executorOption.ifPresent(RepeatedExecution::cancelRepetition);
-	}
-	private void updateUi(String s) {
-		Display.getDefault().asyncExec(() -> outputField.setText(s));
+
+	@Inject
+	public Timer() {
 	}
 	
+	@PostConstruct
+	private void postConstruct() {
+		System.out.println("Timer constructed.");
+	}
+	@Inject
+	@Optional
+	private void startTimer(@UIEventTopic(EVENT_START_TIMER) NotifcationObject no) {
+		if (!isTimerRunning) {
+			timer.scheduleAtFixedRate(lastTask, INTERLVALL, INTERLVALL);
+			isTimerRunning = true;
+		}
+	}
+
+	@Inject
+	@Optional
+	private void stopTimer(@UIEventTopic(EVENT_CANCEL_TIMER) NotifcationObject no) {
+		lastTask.cancel();
+		isTimerRunning = false;
+		lastTask = createTask();
+	}
+
+	@Inject
+	@Optional
+	private void setTimer(@UIEventTopic(EVENT_DURATION_SET) Duration duration) {
+		eventBroker.send(EVENT_CANCEL_TIMER, NotifcationObject.get());
+		durationLeft = duration.clone();
+		lastRun = duration.clone();
+		eventBroker.post(EVENT_DURATION_UPDATE, durationLeft.clone());
+	}
+
+	@Inject
+	@Optional
+	private void timeOver(@UIEventTopic(EVENT_TIME_IS_OVER) NotifcationObject no) {
+		eventBroker.send(EVENT_DURATION_SET, lastRun);
+	}
 }
