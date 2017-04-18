@@ -24,22 +24,14 @@ public class TimerView {
 	@Inject
 	private IEclipseContext context;
 
-	private Clock clock;
 	private ControlLine controlLine;
-	private ConfigLine configLine;
 
 	@PostConstruct
 	public void createPartControl(Composite parent) {
 		setLayout(parent);
-		clock = ContextInjectionFactory.make(Clock.class, context);
+		ContextInjectionFactory.make(Clock.class, context);
 		controlLine = ContextInjectionFactory.make(ControlLine.class, context);
-		configLine = ContextInjectionFactory.make(ConfigLine.class, context);
-	}
-	
-	private IEclipseContext createChildCompositContext(Composite parent) {
-		IEclipseContext child = context.createChild();
-		child.set(Composite.class, new Composite(parent, SWT.FLAT));
-		return child;
+		ContextInjectionFactory.make(ConfigLine.class, context);
 	}
 
 	private void setLayout(Composite parent) {

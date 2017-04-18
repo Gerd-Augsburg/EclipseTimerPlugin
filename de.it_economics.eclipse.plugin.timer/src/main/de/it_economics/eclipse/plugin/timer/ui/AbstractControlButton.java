@@ -3,6 +3,7 @@ package de.it_economics.eclipse.plugin.timer.ui;
 
 import javax.annotation.PostConstruct;
 
+import org.eclipse.e4.ui.di.Focus;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
@@ -37,7 +38,9 @@ public abstract class AbstractControlButton {
 	}
 	protected abstract void action();
 	
-	
-	
+	@Focus
+	public void setFocus() {
+		this.button.setFocus();
+	}
 	
 }

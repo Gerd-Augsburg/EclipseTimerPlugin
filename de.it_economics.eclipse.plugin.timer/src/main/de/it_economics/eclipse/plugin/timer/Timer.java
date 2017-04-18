@@ -23,7 +23,6 @@ public class Timer {
 	public final static String EVENT_START_TIMER = BASE + "startTimer";
 	public final static String EVENT_CANCEL_TIMER = BASE + "cancelTimer";
 	public final static String EVENT_DURATION_SET = BASE + "durationSet";
-	public final static String EVENT_REGISTER_DURATION_PROVIDER = BASE + "registerDurationProvider";
 
 	@Inject
 	private IEventBroker eventBroker;
@@ -33,7 +32,7 @@ public class Timer {
 	private final static long INTERLVALL = 1000;
 	private boolean isTimerRunning = false;
 	private java.util.Timer timer = new java.util.Timer(true);
-	private TimerTask lastTask = createTask();
+	private TimerTask lastTask;
 
 	private TimerTask createTask() {
 		return new TimerTask() {
@@ -54,7 +53,8 @@ public class Timer {
 	
 	@PostConstruct
 	private void postConstruct() {
-		System.out.println("Timer constructed.");
+		durationLeft = new Duration(0);
+		lastTask = createTask();
 	}
 	@Inject
 	@Optional

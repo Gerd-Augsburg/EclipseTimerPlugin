@@ -1,4 +1,4 @@
- 
+
 package de.it_economics.eclipse.plugin.timer.ui;
 
 import java.util.function.Supplier;
@@ -14,9 +14,9 @@ import de.it_economics.eclipse.plugin.timer.utils.Duration;
 
 public class SetButton extends AbstractControlButton {
 	private Supplier<Duration> durationProvider;
-	@Inject private IEventBroker eventbroker;
+	@Inject
+	private IEventBroker eventbroker;
 
-	
 	@Inject
 	public SetButton() {
 		super("Set Time");
@@ -26,13 +26,12 @@ public class SetButton extends AbstractControlButton {
 	protected void action() {
 		eventbroker.post(Timer.EVENT_DURATION_SET, durationProvider.get());
 	}
-	
+
 	@Inject
 	@Optional
 	private void registerDurationProvider(
-			@UIEventTopic(Timer.EVENT_REGISTER_DURATION_PROVIDER)
-			Supplier<Duration> durationProvider) {
+			@UIEventTopic(ConfigLine.EVENT_REGISTER_DURATION_PROVIDER) Supplier<Duration> durationProvider) {
 		this.durationProvider = durationProvider;
 	}
-	
+
 }
