@@ -50,12 +50,14 @@ public class Timer {
 	@Inject
 	public Timer() {
 	}
-	
+
 	@PostConstruct
 	private void postConstruct() {
 		durationLeft = new Duration(0);
+		lastRun = new Duration(0);
 		lastTask = createTask();
 	}
+
 	@Inject
 	@Optional
 	private void startTimer(@UIEventTopic(EVENT_START_TIMER) NotifcationObject no) {

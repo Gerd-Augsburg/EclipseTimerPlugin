@@ -25,13 +25,16 @@ public class TimerView {
 	private IEclipseContext context;
 
 	private ControlLine controlLine;
+	// Needs to be stored, otherwise they don't get initialized on application restart
+	private Clock clock;
+	private ConfigLine configline;
 
 	@PostConstruct
 	public void createPartControl(Composite parent) {
 		setLayout(parent);
-		ContextInjectionFactory.make(Clock.class, context);
+		clock = ContextInjectionFactory.make(Clock.class, context);
 		controlLine = ContextInjectionFactory.make(ControlLine.class, context);
-		ContextInjectionFactory.make(ConfigLine.class, context);
+		configline = ContextInjectionFactory.make(ConfigLine.class, context);
 	}
 
 	private void setLayout(Composite parent) {

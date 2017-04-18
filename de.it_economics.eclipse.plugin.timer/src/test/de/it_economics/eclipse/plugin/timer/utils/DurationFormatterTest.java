@@ -18,5 +18,12 @@ public class DurationFormatterTest {
 		DurationFormatter formatter = new DurationFormatter(duration);
 		assertEquals("01:01:01.001", formatter.getClocklike());
 	}
+	
+	@Test
+	public void clocklikeZeroTest() {
+		Duration duration = new Duration(0);
+		DurationFormatter formatter = new DurationFormatter(duration);
+		assertEquals("00:00:00.000", formatter.getClocklike());
+	}
 
 }
