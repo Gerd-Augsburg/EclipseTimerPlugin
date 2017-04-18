@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="ASCII"?>
 <fragment:ModelFragments xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:application="http://www.eclipse.org/ui/2010/UIModel/application" xmlns:basic="http://www.eclipse.org/ui/2010/UIModel/application/descriptor/basic" xmlns:fragment="http://www.eclipse.org/ui/2010/UIModel/fragment" xmi:id="_BxaXACerEeWxCPrV0pAZQQ">
   <fragments xsi:type="fragment:StringModelFragment" xmi:id="_EI7oACerEeWxCPrV0pAZQQ" featurename="descriptors" parentElementId="xpath:/">
-    <elements xsi:type="basic:PartDescriptor" xmi:id="_KMklcCerEeWxCPrV0pAZQQ" elementId="test.partDescFragment.ASampleE4View" label="Timer" iconURI="platform:/plugin/de.it_economics.eclipse.plugin.timer/icons/Sample.png" tooltip="" category="Coding Dojo" contributionURI="bundleclass://de.it_economics.eclipse.plugin.timer/de.it_economics.eclipse.plugin.timer.parts.TimerView">
+    <elements xsi:type="basic:PartDescriptor" xmi:id="_KMklcCerEeWxCPrV0pAZQQ" elementId="de.it_economics.eclipse.plugin.TimerView" label="Timer" iconURI="platform:/plugin/de.it_economics.eclipse.plugin.timer/icons/Sample.png" tooltip="" category="Coding Dojo" contributionURI="bundleclass://de.it_economics.eclipse.plugin.timer/de.it_economics.eclipse.plugin.timer.parts.TimerView">
       <tags>View</tags>
       <tags>categoryTag:Coding Dojo</tags>
     </elements>
   </fragments>
   <fragments xsi:type="fragment:StringModelFragment" xmi:id="_hTdpQCQPEeevWpQc78yifg" featurename="addons" parentElementId="xpath:/">
-    <elements xsi:type="application:Addon" xmi:id="_Q_oeoCBPEee9Nb6KtYSVqA" elementId="test.partDescFragment.ASampleE4AddOn" contributionURI="bundleclass://de.it_economics.eclipse.plugin.timer/de.it_economics.eclipse.plugin.timer.Timer"/>
+    <elements xsi:type="application:Addon" xmi:id="_Q_oeoCBPEee9Nb6KtYSVqA" elementId="de.it_economics.eclipse.plugin.Timer" contributionURI="bundleclass://de.it_economics.eclipse.plugin.timer/de.it_economics.eclipse.plugin.timer.Timer"/>
   </fragments>
 </fragment:ModelFragments>
