@@ -4,12 +4,8 @@ Bundle-Name: Timer
 Bundle-SymbolicName: de.it_economics.eclipse.plugin.timer;singleton:=true
 Bundle-Version: 1.0.0.qualifier
 Require-Bundle: javax.inject,
- org.eclipse.osgi,
  org.eclipse.jface,
  org.eclipse.e4.ui.di,
- org.eclipse.e4.ui.services,
- org.eclipse.e4.core.di.annotations,
- org.eclipse.osgi.services;bundle-version="3.5.100",
  org.eclipse.e4.core.contexts;bundle-version="1.5.1",
  org.eclipse.e4.core.services;bundle-version="2.0.100",
  org.eclipse.e4.core.di;bundle-version="1.6.1"
