@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<site>
+   <feature url="features/de.it_economics.eclipse.feature.timer_1.0.0.qualifier.jar" id="de.it_economics.eclipse.feature.timer" version="1.0.0.qualifier">
+      <category name="CodingDojo"/>
+   </feature>
+   <category-def name="CodingDojo" label="Coding Dojo"/>
+</site>

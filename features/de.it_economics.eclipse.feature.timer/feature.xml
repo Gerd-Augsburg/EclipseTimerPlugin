@@ -1,19 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <feature
-      id="de.it_economics.eclipse.timer"
+      id="de.it_economics.eclipse.feature.timer"
       label="Timer"
       version="1.0.0.qualifier">
 
    <description url="http://www.example.com/description">
-      A simple Timer. Counts down and informs you, when time is up.
+      [Enter Feature Description here.]
    </description>
 
    <copyright url="http://www.example.com/copyright">
-      Not yet any Copyright.
+      [Enter Copyright Description here.]
    </copyright>
 
    <license url="http://www.example.com/license">
-      Not yet any License.
+      [Enter License Description here.]
    </license>
 
    <plugin
