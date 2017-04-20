@@ -24,7 +24,6 @@ public class Timer {
 	public final static String EVENT_CANCEL_TIMER = BASE + "cancelTimer";
 	public final static String EVENT_DURATION_SET = BASE + "durationSet";
 
-	@Inject
 	private IEventBroker eventBroker;
 	private Duration durationLeft;
 	private Duration lastRun;
@@ -52,7 +51,8 @@ public class Timer {
 	}
 
 	@PostConstruct
-	private void postConstruct() {
+	public void postConstruct(IEventBroker broker) {
+		this.eventBroker = broker;
 		durationLeft = new Duration(0);
 		lastRun = new Duration(0);
 		lastTask = createTask();

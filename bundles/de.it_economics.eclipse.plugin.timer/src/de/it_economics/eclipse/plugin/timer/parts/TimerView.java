@@ -26,7 +26,9 @@ public class TimerView {
 
 	private ControlLine controlLine;
 	// Needs to be stored, otherwise they don't get initialized on application restart
+	@SuppressWarnings("unused")
 	private Clock clock;
+	@SuppressWarnings("unused")
 	private ConfigLine configline;
 
 	@PostConstruct
