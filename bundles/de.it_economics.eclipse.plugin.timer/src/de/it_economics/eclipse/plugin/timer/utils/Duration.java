@@ -58,4 +58,14 @@ public class Duration implements MsDuration {
 		clonedDuration.msduration = this.msduration;
 		return clonedDuration;
 	}
+	@Override
+	public String toString() {
+		return Long.toString(msduration);
+	}
+	@Override
+	public boolean equals(Object other) {
+		if (other instanceof Duration)
+			return ((Duration)other).msduration == msduration;
+		return false;
+	}
 }

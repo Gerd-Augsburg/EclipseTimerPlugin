@@ -10,4 +10,8 @@ public class NotifcationObject {
 		}
 		return self;
 	}
+	@Override
+	public String toString() {
+		return "NotificationObject";
+	}
 }

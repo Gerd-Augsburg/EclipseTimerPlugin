@@ -18,7 +18,11 @@
 			<url>${neon-repo.url}</url>
 			<layout>p2</layout>
 		</repository>
-
+		<repository>
+			<id>orbit</id>
+			<url>http://download.eclipse.org/tools/orbit/R-builds/R20170307180635/repository</url>
+			<layout>p2</layout>
+		</repository>
 	</repositories>
 
 	<build>

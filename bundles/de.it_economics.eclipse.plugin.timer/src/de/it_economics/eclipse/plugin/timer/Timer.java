@@ -12,7 +12,10 @@ import org.eclipse.e4.core.services.events.IEventBroker;
 import org.eclipse.e4.ui.di.UIEventTopic;
 
 import de.it_economics.eclipse.plugin.timer.utils.Duration;
+import de.it_economics.eclipse.plugin.timer.utils.InSecondsExecution;
 import de.it_economics.eclipse.plugin.timer.utils.NotifcationObject;
+import de.it_economics.eclipse.plugin.timer.utils.RepeatedExecution;
+import de.it_economics.eclipse.plugin.timer.utils.TimerTaskFactory;
 
 @Creatable
 @Singleton
@@ -27,24 +30,23 @@ public class Timer {
 	private IEventBroker eventBroker;
 	private Duration durationLeft;
 	private Duration lastRun;
-
-	private final static long INTERLVALL = 1000;
-	private boolean isTimerRunning = false;
-	private java.util.Timer timer = new java.util.Timer(true);
-	private TimerTask lastTask;
-
-	private TimerTask createTask() {
-		return new TimerTask() {
-			@Override
-			public void run() {
-				durationLeft.addMilliseconds(-(INTERLVALL));
-				eventBroker.post(EVENT_DURATION_UPDATE, durationLeft.clone());
-				if (!durationLeft.isRealPositiv()) {
-					eventBroker.send(EVENT_TIME_IS_OVER, NotifcationObject.get());
-				}
+	private RepeatedExecution executor = new InSecondsExecution();
+	
+	private TimerTaskFactory taskFactory = new TimerTaskFactory() {
+		@Override
+		public TimerTask make() {
+			return new TimerTask() {
+				@Override
+				public void run() {
+					durationLeft.addMilliseconds(-(executor.getIntervall()));
+					eventBroker.post(EVENT_DURATION_UPDATE, durationLeft.clone());
+					if (!durationLeft.isRealPositiv()) {
+						eventBroker.send(EVENT_TIME_IS_OVER, NotifcationObject.get());
+					}
+				};
 			};
-		};
-	}
+		}
+	};
 
 	@Inject
 	public Timer() {
@@ -53,31 +55,36 @@ public class Timer {
 	@PostConstruct
 	public void postConstruct(IEventBroker broker) {
 		this.eventBroker = broker;
+		
 		durationLeft = new Duration(0);
 		lastRun = new Duration(0);
-		lastTask = createTask();
+	}
+	
+	public void setExecutor(RepeatedExecution exe) {
+		executor = exe;
+	}
+	
+	public void setTaskFactory(TimerTaskFactory taskFactory) {
+		this.taskFactory = taskFactory;
 	}
 
 	@Inject
 	@Optional
-	private void startTimer(@UIEventTopic(EVENT_START_TIMER) NotifcationObject no) {
-		if (!isTimerRunning) {
-			timer.scheduleAtFixedRate(lastTask, INTERLVALL, INTERLVALL);
-			isTimerRunning = true;
+	public void startTimer(@UIEventTopic(EVENT_START_TIMER) NotifcationObject no) {
+		if (!executor.isRunning()) {
+			executor.run(taskFactory.make());
 		}
 	}
 
 	@Inject
 	@Optional
-	private void stopTimer(@UIEventTopic(EVENT_CANCEL_TIMER) NotifcationObject no) {
-		lastTask.cancel();
-		isTimerRunning = false;
-		lastTask = createTask();
+	public void stopTimer(@UIEventTopic(EVENT_CANCEL_TIMER) NotifcationObject no) {
+		executor.cancel();
 	}
 
 	@Inject
 	@Optional
-	private void setTimer(@UIEventTopic(EVENT_DURATION_SET) Duration duration) {
+	public void setTimer(@UIEventTopic(EVENT_DURATION_SET) Duration duration) {
 		eventBroker.send(EVENT_CANCEL_TIMER, NotifcationObject.get());
 		durationLeft = duration.clone();
 		lastRun = duration.clone();
@@ -86,7 +93,7 @@ public class Timer {
 
 	@Inject
 	@Optional
-	private void timeOver(@UIEventTopic(EVENT_TIME_IS_OVER) NotifcationObject no) {
+	public void timeOver(@UIEventTopic(EVENT_TIME_IS_OVER) NotifcationObject no) {
 		eventBroker.send(EVENT_DURATION_SET, lastRun);
 	}
 }
