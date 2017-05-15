@@ -101,7 +101,7 @@ public class TimerTest {
 
 	@Test
 	public void test() {
-		//fail("Not yet implemented");
+		//fail("Expected Failure");
 		assertTrue(true);
 	}
 	
@@ -137,6 +137,7 @@ public class TimerTest {
 		expectedEvents.add(new EventContainer(Timer.EVENT_CANCEL_TIMER, NotifcationObject.get()));
 		expectedEvents.add(new EventContainer(Timer.EVENT_DURATION_UPDATE, duration));
 		timer.postConstruct(broker);
+		
 		timer.setTimer(duration);
 		assertEquals(expectedEvents, events);
 	}
