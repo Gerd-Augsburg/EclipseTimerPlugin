@@ -25,7 +25,7 @@ public class ControlLine {
 	
 	@PostConstruct
 	public void postConstruct(Composite parent) {
-		Composite controlLine = new Composite(parent, SWT.CENTER);
+		Composite controlLine = new Composite(parent, SWT.NONE);
 		controlLine.setLayout(createRowLayout());
 		fillComposite(controlLine);
 	}

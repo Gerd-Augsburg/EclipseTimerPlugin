@@ -29,7 +29,7 @@ public class ConfigLine {
 
 	@PostConstruct
 	public void postConstruct(Composite parent) {
-		Composite container = new Composite(parent, SWT.CENTER);
+		Composite container = new Composite(parent, SWT.NONE);
 		createInputFields(container);
 		eventBroker.post(EVENT_REGISTER_DURATION_PROVIDER, createDurationProvider());
 	}
