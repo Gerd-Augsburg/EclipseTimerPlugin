@@ -6,7 +6,7 @@
          id="de.it_economics.eclipse.plugin.timer.fragment"
          point="org.eclipse.e4.workbench.model">
       <fragment
-            apply="initial"
+            apply="notexists"
             uri="fragment.e4xmi">
       </fragment>
    </extension>
