@@ -5,31 +5,29 @@ import javax.inject.Inject;
 
 import org.eclipse.e4.core.contexts.ContextInjectionFactory;
 import org.eclipse.e4.core.contexts.IEclipseContext;
-import org.eclipse.e4.core.di.annotations.Optional;
 import org.eclipse.e4.ui.di.Focus;
-import org.eclipse.e4.ui.di.UIEventTopic;
-import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.RowLayout;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Display;
 
-import de.it_economics.eclipse.plugin.timer.Timer;
 import de.it_economics.eclipse.plugin.timer.ui.Clock;
 import de.it_economics.eclipse.plugin.timer.ui.ConfigLine;
 import de.it_economics.eclipse.plugin.timer.ui.ControlLine;
-import de.it_economics.eclipse.plugin.timer.utils.NotifcationObject;
+import de.it_economics.eclipse.plugin.timer.ui.TimeOverMessage;
 
 public class TimerView {
 	@Inject
 	private IEclipseContext context;
 
 	private ControlLine controlLine;
-	// Needs to be stored, otherwise they don't get initialized on application restart
+	// Needs to be stored, otherwise they don't get initialized on application
+	// restart
 	@SuppressWarnings("unused")
 	private Clock clock;
 	@SuppressWarnings("unused")
 	private ConfigLine configline;
+	@SuppressWarnings("unused")
+	private TimeOverMessage timeOverMessage;
 
 	@PostConstruct
 	public void createPartControl(Composite parent) {
@@ -37,6 +35,7 @@ public class TimerView {
 		clock = ContextInjectionFactory.make(Clock.class, context);
 		controlLine = ContextInjectionFactory.make(ControlLine.class, context);
 		configline = ContextInjectionFactory.make(ConfigLine.class, context);
+		timeOverMessage = ContextInjectionFactory.make(TimeOverMessage.class, context);
 	}
 
 	private void setLayout(Composite parent) {
@@ -54,13 +53,4 @@ public class TimerView {
 
 	}
 
-	@Inject
-	@Optional
-	private void timeIsOverNotification(@UIEventTopic(Timer.EVENT_TIME_IS_OVER) NotifcationObject no) {
-		Display display = Display.getDefault();
-		display.asyncExec(() -> {
-			MessageDialog.open(MessageDialog.INFORMATION, display.getActiveShell(), "Time is over", "Next one please!",
-					SWT.NONE);
-		});
-	}
 }
